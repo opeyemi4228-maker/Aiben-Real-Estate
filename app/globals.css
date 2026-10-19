@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+/* Black and white carry the design; the logo's colours are accents only.
+   blue  #0A1DC9  the IBEN letters  -> labels, the italic phrase, hover, focus, links
+   red   #ED3237  the swoosh        -> the signature swoosh mark and urgency, nothing else
+   grey  #96989A  the A             -> quiet details */
+@theme {
+  --color-aiben-blue: #0a1dc9;
+  --color-aiben-blue-deep: #0716a3;
+  --color-aiben-red: #ed3237;
+  --color-aiben-red-ink: #d3141c; /* red for small text on white (5.4:1) */
+  --color-aiben-grey: #96989a;
+
+  --color-soil: #0a0a0a;
+  --color-soil-2: #151515;
+  --color-soil-3: #262626;
+  --color-sand: #f4f4f2;
+  --color-sand-2: #ffffff;
+  --color-savanna: #1f7a4d;
+  --color-ink: #0a0a0a;
+  --color-muted: #5e5e5e;
+
+  --font-display: var(--font-bodoni), "Didot", "Bodoni 72", Georgia, serif;
+  --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+
+  /* Larger type scale: body copy reads at 16-18px. */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.6;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.65;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+
+  /* Squarer corners read as firmer. */
+  --radius-lg: 0.125rem;
+  --radius-xl: 0.1875rem;
+  --radius-2xl: 0.25rem;
+
+  --ease-ground: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Buttons stay black on light and white on dark; on light they turn AIBEN blue
+   on hover. `accent` is the brand blue on light surfaces and plain white on dark
+   (a lightened blue looks washed out over photography). `signal` is the swoosh
+   red, tuned per surface for contrast. */
+@theme inline {
+  --color-laterite: var(--brand);
+  --color-laterite-2: var(--brand-2);
+  --color-gold: var(--brand);
+  --color-gold-2: var(--brand-2);
+  --color-on-brand: var(--on-brand);
+  --color-signal: var(--signal);
+  --color-accent: var(--accent);
+  --color-brass: var(--signal);
+}
+
+:root,
+.scope-light,
+[class~="bg-sand"],
+[class~="bg-sand-2"],
+[class~="bg-white"] {
+  --brand: #0a0a0a;
+  --brand-2: #0a1dc9;
+  --on-brand: #ffffff;
+  --em: #0a1dc9;
+  --accent: #0a1dc9;
+  --signal: #d3141c;
+}
+.scope-dark,
+[class~="bg-soil"],
+[class~="bg-soil-2"],
+[class~="bg-soil-3"],
+[class*="bg-soil/"],
+[class~="text-sand"] {
+  --brand: #ffffff;
+  --brand-2: #e6e6e6;
+  --on-brand: #0a0a0a;
+  --em: rgb(255 255 255 / 0.85);
+  --accent: #ffffff;
+  --signal: #ff5c61;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+html[data-motion="paused"] {
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--color-sand-2);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-feature-settings: "tnum" 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Every display-face line is set in the high-contrast serif. */
+.font-display {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Signature device: an upright Didone line closing on one italic phrase. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+.display em {
+  font-style: italic;
+  color: var(--em);
+  font-weight: 400;
+}
+
+/* Wide-tracked capitals for navigation, buttons and labels. */
+.caps {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+/* Section labels carry the brand blue; labels given another colour keep it. */
+.eyebrow.text-laterite,
+.eyebrow.text-gold {
+  color: var(--accent);
+}
+
+/* Reveal on scroll. Content is visible by default so nothing hides if JS fails. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease-ground),
+    transform 0.9s var(--ease-ground);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+html[data-motion="paused"] [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Day-to-night hero: the night layer breathes in and out. */
+@keyframes nightfall {
+  0%, 20% { opacity: 0; }
+  50%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.nightfall {
+  animation: nightfall 18s ease-in-out infinite;
+}
+@keyframes drift {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+.drift {
+  animation: drift 12s var(--ease-ground) both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.rise {
+  animation: rise 1.1s var(--ease-ground) both;
+}
+/* Hero photographs cross-fade in turn; the first one shows without JS or motion. */
+@keyframes heroslide {
+  0% { opacity: 0; }
+  6%, 33% { opacity: 1; }
+  40%, 100% { opacity: 0; }
+}
+.hero-slide {
+  animation-name: heroslide;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+html[data-motion="paused"] .hero-slide {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide {
+    animation: none !important;
+  }
+}
+
+@keyframes fadeout {
+  to { opacity: 0; visibility: hidden; }
+}
+
+html[data-motion="paused"] *,
+html[data-motion="paused"] *::before,
+html[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+html[data-motion="paused"] .rise {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .nightfall {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Data saver hides decorative layers. */
+html[data-saver="on"] .decor {
+  display: none !important;
+}
+
+.snap-x-gallery {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.snap-x-gallery::-webkit-scrollbar {
+  display: none;
+}
+.snap-x-gallery > * {
+  scroll-snap-align: start;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-soil);
+}
+/* Black-and-white map; pins carry the swoosh red. */
+.leaflet-tile-pane {
+  filter: grayscale(1) invert(1) brightness(0.85) contrast(1.05);
+}
+.aiben-pin {
+  background: var(--color-aiben-red);
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 6px rgb(237 50 55 / 0.3);
+}
+
+input[type="range"] {
+  accent-color: var(--color-aiben-blue);
+}
+
+/* The swoosh: the red arc from the logo, the site's signature mark. */
+.swoosh path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@keyframes swoosh-in {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.swoosh-animate path {
+  animation: swoosh-in 1.6s var(--ease-ground) var(--swoosh-delay, 0s) both;
+}
+
+::selection {
+  background: var(--color-aiben-blue);
+  color: #ffffff;
+}
+
+/* Floating widgets step aside while the mobile menu is open. */
+html[data-menu="open"] .hide-when-menu {
+  display: none;
+}
