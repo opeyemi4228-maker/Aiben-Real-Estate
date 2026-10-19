@@ -69,6 +69,9 @@ export default function Header() {
   // Transparent over a hero, white everywhere else; black when the mobile menu is open.
   const clear = overHero && !scrolled && !open;
   const dark = clear || open;
+  // Compact (80px) header: after scrolling, and always while the menu is open,
+  // because the menu panel starts exactly 80px down.
+  const compact = scrolled || open;
 
   return (
     <header
@@ -86,7 +89,7 @@ export default function Header() {
       <div
         className={clsx(
           "scope-dark hidden overflow-hidden bg-soil text-white transition-[max-height] duration-500 lg:block",
-          scrolled ? "max-h-0" : "max-h-12",
+          compact ? "max-h-0" : "max-h-12",
         )}
       >
         <div className="mx-auto flex h-12 max-w-360 items-center gap-8 px-10 text-sm whitespace-nowrap">
@@ -122,7 +125,7 @@ export default function Header() {
       <div
         className={clsx(
           "mx-auto grid h-20 max-w-360 grid-cols-[1fr_auto] items-center gap-6 px-5 transition-[height] duration-500 sm:px-8 lg:px-10 xl:grid-cols-[1fr_auto_1fr] xl:gap-10",
-          scrolled ? "lg:h-20" : "lg:h-28",
+          compact ? "lg:h-20" : "lg:h-28",
         )}
       >
         <nav aria-label="Main, first half" className="hidden h-full items-stretch justify-end gap-10 xl:flex 2xl:gap-14">
@@ -138,7 +141,7 @@ export default function Header() {
         >
           <Logo
             tone={clear || open ? "reversed" : "color"}
-            className={clsx("h-11 transition-[height] duration-500", scrolled ? "lg:h-12" : "lg:h-16")}
+            className={clsx("h-11 transition-[height] duration-500", compact ? "lg:h-12" : "lg:h-16")}
           />
         </Link>
 
@@ -162,7 +165,8 @@ export default function Header() {
 
       {open && (
         <div id="mobile-menu" className="fixed inset-x-0 top-20 bottom-0 flex flex-col border-t border-white/10 bg-soil xl:hidden">
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-6 pb-8 sm:px-8">
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-6 pb-8 sm:px-8 lg:px-10">
+            <div className="mx-auto max-w-3xl">
             <p className="eyebrow flex items-center gap-3 text-white/50">
               <Swoosh className="w-8" /> Explore
             </p>
@@ -203,10 +207,12 @@ export default function Header() {
                 </li>
               ))}
             </ul>
+            </div>
           </div>
 
           {/* Actions stay pinned at the bottom, within thumb reach. */}
-          <div className="border-t border-white/10 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8">
+          <div className="border-t border-white/10 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-8 lg:px-10">
+            <div className="mx-auto max-w-3xl">
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href="/book-inspection"
@@ -227,6 +233,7 @@ export default function Header() {
               <a href={`tel:${company.phones[0].replace(/\s/g, "")}`} className="inline-flex items-center gap-2 text-sm text-white/75">
                 <Phone className="size-4" /> {company.phones[0]}
               </a>
+            </div>
             </div>
           </div>
         </div>
