@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Scene from "./Scene";
 import Logo from "./Logo";
 import Swoosh from "./Swoosh";
 
@@ -48,10 +47,20 @@ export default function Opening() {
       className={`fixed inset-0 z-[90] overflow-hidden bg-soil text-sand transition-opacity duration-900 ${state === "leaving" ? "pointer-events-none opacity-0" : "opacity-100"}`}
       aria-label="Opening sequence"
     >
-      <div className="absolute inset-0 opacity-50">
-        <Scene kind="land" time="dusk" seed={5} className="drift h-full w-full" label={false} title="Drone view over the HUTU Prestige land at dusk" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-soil/70 via-soil/30 to-soil/80" />
+      {/* A real AIBEN residence behind the title. Loaded eagerly: it is the
+          first thing a visitor sees. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/estates/residence-2.jpg"
+        alt=""
+        fetchPriority="high"
+        decoding="async"
+        className="drift absolute inset-0 h-full w-full object-cover object-[50%_60%]"
+      />
+      {/* Monochrome grade: darker at the edges, a little lighter behind the title. */}
+      <div className="absolute inset-0 bg-soil/55" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgb(10_10_10/0.55)_75%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-soil/60 via-transparent to-soil/80" />
       <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">
         <div className="rise" style={{ animationDelay: "200ms" }}>
           <Logo tone="reversed" className="h-14 sm:h-20" />
